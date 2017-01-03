@@ -1,0 +1,12 @@
+[backup_name]
+# config file name can be anything, pass to backup.py via cli option '--config-file'
+#type = 'full', 'inc'
+type:full
+source-path:/path/to/source/dir/
+dest-path:/other/path/to/dest/dir/
+archive-dir:/path/to/duplicity/cache/dir/for/this/backup
+# retain-number is the number of full backups to keep when cleaning up - includes assoc'd incrementals
+retain-number: 3
+# the two items below are flags to disable compression and encryption, respectively
+no-compression
+no-encryption
