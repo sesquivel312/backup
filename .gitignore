@@ -1,12 +1,13 @@
 # ignore xml or gexf files (gephi) - so diagrams don't inadvertantly end up on GH
 addl/
-bkp/
+dest/
 duplicity_data/
 origin/
+scratch/
+ignore/
 *.sh
 *.txt
 *.cfg
-ignore/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

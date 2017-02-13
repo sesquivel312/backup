@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
-import subprocess
-import argparse
 import ConfigParser
+import argparse
+import subprocess
 import sys
+
+from backup import Backup
 
 
 def get_args():
@@ -21,27 +23,33 @@ def get_args():
 
 
 def parse_config(config_file):
+    """
+    return a dictionary of backup objects
+
+    dict is keyed by backup object's name attribute
+
+    :param config_file: path to config file
+    :return: dict of backup objects
+    """
     config = ConfigParser.ConfigParser(allow_no_value=True)
     config.read(config_file)
 
-    section = config.sections()[0]  # for now this should contain only 1 item, future may allow multiple sections
+    backups = {}
 
-    source_path = config.get(section, 'source-path')
-    dest_path = config.get(section, 'dest-path')
-    type = config.get(section, 'type')
+    for section in config.sections():
 
-    backup_opts = ['--archive-dir', config.get(section,'archive-dir'), '--name', section]
+        curr_backup_name = config.get(section, 'name')
+        curr_backup_init_values = {}
 
-    if config.has_option(section, 'no-compression'):
-        backup_opts.append('--no-compression')
+        for item in config.items(section):
+            key = item[0]
+            value = item[1]
+            curr_backup_init_values[key] = value
 
-    if config.has_option(section, 'no-encryption'):
-        backup_opts.append('--no-encryption')
+        backups[curr_backup_name] = Backup(**curr_backup_init_values)
 
-    retention_opts = [config.get(section,'retain-number'), '--archive-dir', config.get(section,'archive-dir'),
-                      '--name', section, '--force']
 
-    return type, source_path, dest_path, backup_opts, retention_opts
+    return backups
 
 
 def parse_output(output):
